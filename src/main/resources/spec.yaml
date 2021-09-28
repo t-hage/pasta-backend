@@ -1,0 +1,36 @@
+openapi: "3.0.0"
+info:
+  title: Pasta
+  description: This is a sample server for Pasta
+  version: 0.0.1
+servers:
+  - url: /v1
+tags:
+  - name: Product
+    description: Products
+paths:
+  /products:
+    get:
+      operationId: listProducts
+      responses:
+        '200':
+          description: "Lists all Products"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Product"
+      tags:
+        - Product
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
