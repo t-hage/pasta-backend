@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ProductResource(val productService: ProductService) : ProductsApi {
-    override fun listProducts(): ResponseEntity<List<ProductDto>> {
+    override fun getProducts(): ResponseEntity<List<ProductDto>> {
         return ResponseEntity.ok(productService.getProducts().map { it.toDto() })
     }
 }

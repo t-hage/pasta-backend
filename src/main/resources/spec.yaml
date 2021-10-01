@@ -8,10 +8,14 @@ servers:
 tags:
   - name: Product
     description: Products
+  - name: Meal
+    description: Meals
+  - name: ShoppingList
+    description: ShoppingLists
 paths:
   /products:
     get:
-      operationId: listProducts
+      operationId: getProducts
       responses:
         '200':
           description: "Lists all Products"
@@ -22,6 +26,33 @@ paths:
                   $ref: "#/components/schemas/Product"
       tags:
         - Product
+  /meals:
+    get:
+      operationId: getMeals
+      responses:
+        '200':
+          description: "Lists all Meals"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Meal"
+      tags:
+        - Meal
+  /shoppingLists:
+    get:
+      operationId: getShoppingLists
+      responses:
+        '200':
+          description: "Lists all Shopping Lists"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShoppingList"
+      tags:
+        - ShoppingList
+
 components:
   schemas:
     Product:
@@ -34,3 +65,51 @@ components:
           format: int64
         name:
           type: string
+    ProductEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          $ref: "#/components/schemas/Quantity"
+
+    Quantity:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        quantityType:
+          type: string
+    Meal:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        productEntries:
+          items:
+            $ref: "#/components/schemas/ProductEntry"
+    ShoppingList:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        meals:
+          items:
+            $ref: "#/components/schemas/Meal"
+        productEntries:
+          items:
+            $ref: "#/components/schemas/ProductEntry"
