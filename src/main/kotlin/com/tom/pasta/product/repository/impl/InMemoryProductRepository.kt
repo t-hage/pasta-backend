@@ -1,6 +1,7 @@
-package com.tom.pasta.product.repository
+package com.tom.pasta.product.repository.impl
 
 import com.tom.pasta.product.model.Product
+import com.tom.pasta.product.repository.ProductRepository
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -16,5 +17,9 @@ internal class InMemoryProductRepository : ProductRepository {
 
     override fun getAll(): List<Product> {
         return allProducts
+    }
+
+    override fun findById(id: Long): Product? {
+        return allProducts.firstOrNull { it.id == id }
     }
 }

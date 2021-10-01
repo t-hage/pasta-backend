@@ -1,6 +1,6 @@
 package com.tom.pasta.api
 
-import com.tom.pasta.converter.toDto
+import com.tom.pasta.api.converter.toDto
 import com.tom.pasta.model.ProductDto
 import com.tom.pasta.product.ProductService
 import org.springframework.http.ResponseEntity

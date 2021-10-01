@@ -1,4 +1,4 @@
-package com.tom.pasta.converter
+package com.tom.pasta.api.converter
 
 import com.tom.pasta.model.ProductDto
 import com.tom.pasta.product.model.Product
