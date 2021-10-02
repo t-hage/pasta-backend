@@ -39,19 +39,50 @@ paths:
                   $ref: "#/components/schemas/Meal"
       tags:
         - Meal
-  /shoppingLists:
+  /shoppingLists/{shoppingListId}:
     get:
-      operationId: getShoppingLists
+      operationId: getShoppingList
       responses:
         '200':
-          description: "Lists all Shopping Lists"
+          description: "Lists a Shopping List"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/ShoppingList"
+        '404':
+          description: "No Shopping List found"
+      tags:
+        - ShoppingList
+      parameters:
+        - in: path
+          name: shoppingListId
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+  /shoppingLists/{shoppingListId}/mergedProductEntries:
+    get:
+      operationId: getShoppingListMergedProductEntries
+      responses:
+        '200':
+          description: "Lists a Shopping Lists merged product entries from both products and meals"
           content:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/ShoppingList"
+                  $ref: "#/components/schemas/ProductQuantity"
+        '404':
+          description: "No Shopping List found"
       tags:
         - ShoppingList
+      parameters:
+        - in: path
+          name: shoppingListId
+          required: true
+          schema:
+            type: integer
+            format: int64
 
 components:
   schemas:
@@ -75,7 +106,13 @@ components:
           $ref: "#/components/schemas/Product"
         quantity:
           $ref: "#/components/schemas/Quantity"
-
+    ProductQuantity:
+      type: object
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        quantity:
+          $ref: "#/components/schemas/Quantity"
     Quantity:
       type: object
       properties:

@@ -1,6 +1,8 @@
 package com.tom.pasta.shoppinglist.repository.impl
 
+import com.tom.pasta.meal.model.Meal
 import com.tom.pasta.meal.repository.MealRepository
+import com.tom.pasta.product.model.ProductEntry
 import com.tom.pasta.product.repository.ShoppingListProductEntryRepository
 import com.tom.pasta.shoppinglist.model.ShoppingList
 import com.tom.pasta.shoppinglist.repository.ShoppingListRepository
@@ -16,7 +18,6 @@ internal class InMemoryShoppingListRepository(
     private val mealToShoppingList = listOf(
         MealToShoppingListEntity(1, 1),
         MealToShoppingListEntity(1, 2),
-        MealToShoppingListEntity(2, 2),
     )
 
     private val allShoppingLists = listOf(
@@ -28,17 +29,21 @@ internal class InMemoryShoppingListRepository(
         return allShoppingLists.firstOrNull { it.id == id }
     }
 
-    override fun getAll(): List<ShoppingList> {
-        return allShoppingLists
+    private fun getMeals(id: Long): List<Meal> {
+        return mealToShoppingList.filter { it.shoppingListId == id }
+            .mapNotNull { mealRepository.findMealById(it.mealId) }
+    }
+
+    private fun getProductEntries(id: Long): List<ProductEntry> {
+        return shoppingListProductEntryRepository.getAllByShoppingListId(id)
     }
 
     private fun asShoppingList(
         id: Long,
         name: String,
     ): ShoppingList {
-        val productEntries = shoppingListProductEntryRepository.getAllByShoppingListId(id)
-        val meals = mealToShoppingList.filter { it.shoppingListId == id }
-            .mapNotNull { mealRepository.findMealById(it.mealId) }
+        val productEntries = getProductEntries(id)
+        val meals = getMeals(id)
         return ShoppingList(id, name, productEntries, meals)
     }
 }
