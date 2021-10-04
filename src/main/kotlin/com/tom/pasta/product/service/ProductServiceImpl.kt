@@ -10,4 +10,20 @@ private class ProductServiceImpl(val productRepository: ProductRepository) : Pro
     override fun getProducts(): List<Product> {
         return productRepository.getAll()
     }
+
+    override fun find(id: Long): Product? {
+        return productRepository.findById(id)
+    }
+
+    override fun create(product: Product): Product {
+        return productRepository.create(product.copy(id = null))
+    }
+
+    override fun update(product: Product): Product? {
+        return productRepository.update(product)
+    }
+
+    override fun delete(id: Long) {
+        productRepository.delete(id)
+    }
 }

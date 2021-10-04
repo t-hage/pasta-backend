@@ -24,8 +24,66 @@ paths:
               schema:
                 items:
                   $ref: "#/components/schemas/Product"
+    post:
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: "Create Product"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
       tags:
         - Product
+  /products/{productId}:
+    get:
+      operationId: getProduct
+      responses:
+        '200':
+          description: "Get Product"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: 'Does not exist'
+    put:
+      operationId: editProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: "Edit Product"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: 'Does not exist'
+    delete:
+      operationId: deleteProduct
+      responses:
+        '204':
+          description: "Delete Product"
+      tags:
+        - Product
+    parameters:
+      - in: path
+        name: productId
+        required: true
+        schema:
+          type: integer
+          format: int64
   /meals:
     get:
       operationId: getMeals

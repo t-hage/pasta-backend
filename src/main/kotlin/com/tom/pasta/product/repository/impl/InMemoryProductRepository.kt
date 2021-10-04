@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 internal class InMemoryProductRepository : ProductRepository {
 
-    private val allProducts = listOf(
+    private val allProducts = mutableListOf(
         asProduct(1, "chicken"),
         asProduct(2, "tomato"),
         asProduct(3, "cucumber"),
@@ -21,5 +21,28 @@ internal class InMemoryProductRepository : ProductRepository {
 
     override fun findById(id: Long): Product? {
         return allProducts.firstOrNull { it.id == id }
+    }
+
+    override fun create(product: Product): Product {
+        val newProduct = product.copy(id = getNewId())
+        allProducts.add(newProduct)
+        return newProduct
+    }
+
+    override fun update(product: Product): Product? {
+        findById(product.id!!) ?: return null
+        delete(product.id)
+        allProducts.add(product)
+        return product
+    }
+
+    override fun delete(id: Long) {
+        val toRemove = findById(id) ?: return
+        allProducts.remove(toRemove)
+    }
+
+    private fun getNewId(): Long {
+        val currentHighestId = allProducts.map { it.id }.maxByOrNull { it!! } ?: 0L
+        return currentHighestId + 1
     }
 }
