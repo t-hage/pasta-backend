@@ -11,7 +11,7 @@ fun MealDto.fromDto(): Meal {
         if (this.id == null)
             emptyList()
         else
-            this.productEntries.map { it.mealProductEntryFromDto(this.id) }
+            this.productEntries.map { it.fromDto() }
     )
 }
 

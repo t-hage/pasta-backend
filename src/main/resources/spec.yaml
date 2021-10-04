@@ -51,7 +51,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
-        404:
+        '404':
           description: 'Does not exist'
     put:
       operationId: editProduct
@@ -68,7 +68,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
-        404:
+        '404':
           description: 'Does not exist'
     delete:
       operationId: deleteProduct
@@ -122,7 +122,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Meal"
-        404:
+        '404':
           description: 'Does not exist'
     put:
       operationId: editMeal
@@ -139,7 +139,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Meal"
-        404:
+        '404':
           description: 'Does not exist'
     delete:
       operationId: deleteMeal
@@ -151,6 +151,69 @@ paths:
     parameters:
       - in: path
         name: mealId
+        required: true
+        schema:
+          type: integer
+          format: int64
+  /meals/{mealId}/entry:
+    post:
+      operationId: addEntry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntry'
+        required: true
+      responses:
+        '200':
+          description: "Edit Meal"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductEntry"
+        '404':
+          description: 'Does not exist'
+    parameters:
+      - in: path
+        name: mealId
+        required: true
+        schema:
+          type: integer
+          format: int64
+  /meals/{mealId}/entry/{entryId}:
+    put:
+      operationId: updateEntry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntry'
+        required: true
+      responses:
+        '200':
+          description: "Edit Meal"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductEntry"
+        '404':
+          description: 'Does not exist'
+    delete:
+      operationId: deleteEntry
+      responses:
+        '204':
+          description: "Delete Entry"
+      tags:
+        - Meal
+    parameters:
+      - in: path
+        name: mealId
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: path
+        name: entryId
         required: true
         schema:
           type: integer

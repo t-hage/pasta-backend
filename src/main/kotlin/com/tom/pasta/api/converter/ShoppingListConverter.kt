@@ -12,7 +12,7 @@ fun ShoppingListDto.fromDto(): ShoppingList {
         if (this.id == null)
             emptyList()
         else
-            this.productEntries.map { it.mealProductEntryFromDto(this.id) }
+            this.productEntries.map { it.fromDto() }
     )
 }
 

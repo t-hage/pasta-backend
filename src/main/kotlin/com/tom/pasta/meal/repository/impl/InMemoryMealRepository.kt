@@ -23,7 +23,7 @@ class InMemoryMealRepository(val mealProductEntryRepository: MealProductEntryRep
     }
 
     override fun create(meal: Meal): Meal {
-        val newMeal = meal.copy(id = getNewId())
+        val newMeal = meal.copy(id = getNewId(), productEntries = emptyList())
         allMeals.add(newMeal)
 
         mealProductEntryRepository.upsertProductEntriesForMealId(newMeal.id!!, meal.productEntries)
@@ -33,14 +33,13 @@ class InMemoryMealRepository(val mealProductEntryRepository: MealProductEntryRep
     override fun update(meal: Meal): Meal? {
         findById(meal.id!!) ?: return null
         delete(meal.id)
-        allMeals.add(meal)
+        allMeals.add(meal.copy(productEntries = emptyList()))
         mealProductEntryRepository.upsertProductEntriesForMealId(meal.id, meal.productEntries)
         return findById(meal.id) ?: throw Exception("Not found")
     }
 
     override fun delete(id: Long) {
-        val toRemove = findById(id) ?: return
-        allMeals.remove(toRemove)
+        allMeals.removeIf { it.id == id }
         mealProductEntryRepository.deleteAllByMealId(id)
     }
 

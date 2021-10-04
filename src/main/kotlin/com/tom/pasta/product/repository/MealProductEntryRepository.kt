@@ -1,12 +1,9 @@
 package com.tom.pasta.product.repository
 
-import com.tom.pasta.product.model.MealProductEntry
+import com.tom.pasta.product.model.ProductEntry
 
 interface MealProductEntryRepository {
-    fun getAllByMealId(id: Long): List<MealProductEntry>
-    fun upsertProductEntriesForMealId(mealId: Long, mealProductEntries: List<MealProductEntry>): List<MealProductEntry>
+    fun getAllByMealId(id: Long): List<ProductEntry>
+    fun upsertProductEntriesForMealId(mealId: Long, mealProductEntries: List<ProductEntry>): List<ProductEntry>
     fun deleteAllByMealId(mealId: Long)
-//    fun addProductEntry(mealProductEntry: MealProductEntry): MealProductEntry
-//    fun editProductEntry(mealProductEntry: MealProductEntry): MealProductEntry
-//    fun deleteProductEntry(mealId: Long, productEntryId: Long)
 }
