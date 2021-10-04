@@ -31,7 +31,7 @@ internal class InMemoryShoppingListRepository(
 
     private fun getMeals(id: Long): List<Meal> {
         return mealToShoppingList.filter { it.shoppingListId == id }
-            .mapNotNull { mealRepository.findMealById(it.mealId) }
+            .mapNotNull { mealRepository.findById(it.mealId) }
     }
 
     private fun getProductEntries(id: Long): List<ProductEntry> {

@@ -1,8 +1,8 @@
 package com.tom.pasta.product.model
 
-class MealProductEntry(
+data class MealProductEntry(
     val mealId: Long,
-    id: Long?,
-    product: Product,
-    quantity: Quantity
+    override val id: Long?,
+    override val product: Product,
+    override val quantity: Quantity
 ) : ProductEntry(id, product, quantity)

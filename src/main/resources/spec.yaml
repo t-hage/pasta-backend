@@ -95,8 +95,66 @@ paths:
               schema:
                 items:
                   $ref: "#/components/schemas/Meal"
+    post:
+      operationId: createMeal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+        required: true
+      responses:
+        '200':
+          description: "Create Meal"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
       tags:
         - Meal
+  /meals/{mealId}:
+    get:
+      operationId: getMeal
+      responses:
+        '200':
+          description: "Get Meal"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
+        404:
+          description: 'Does not exist'
+    put:
+      operationId: editMeal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+        required: true
+      responses:
+        '200':
+          description: "Edit Meal"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
+        404:
+          description: 'Does not exist'
+    delete:
+      operationId: deleteMeal
+      responses:
+        '204':
+          description: "Delete Meal"
+      tags:
+        - Meal
+    parameters:
+      - in: path
+        name: mealId
+        required: true
+        schema:
+          type: integer
+          format: int64
   /shoppingLists/{shoppingListId}:
     get:
       operationId: getShoppingList
@@ -156,6 +214,9 @@ components:
           type: string
     ProductEntry:
       type: object
+      required:
+        - product
+        - quantity
       properties:
         id:
           type: integer
@@ -173,6 +234,9 @@ components:
           $ref: "#/components/schemas/Quantity"
     Quantity:
       type: object
+      required:
+        - amount
+        - quantityType
       properties:
         amount:
           type: integer
@@ -183,6 +247,7 @@ components:
       type: object
       required:
         - name
+        - productEntries
       properties:
         id:
           type: integer
@@ -196,6 +261,7 @@ components:
       type: object
       required:
         - name
+        - productEntries
       properties:
         id:
           type: integer

@@ -8,10 +8,22 @@ import org.springframework.stereotype.Service
 @Service
 class MealServiceImpl(val mealRepository: MealRepository) : MealService {
     override fun findById(id: Long): Meal? {
-        return mealRepository.findMealById(id)
+        return mealRepository.findById(id)
     }
 
     override fun getAll(): List<Meal> {
         return mealRepository.getAllMeals()
+    }
+
+    override fun create(meal: Meal): Meal {
+        return mealRepository.create(meal)
+    }
+
+    override fun update(meal: Meal): Meal? {
+        return mealRepository.update(meal)
+    }
+
+    override fun delete(id: Long) {
+        mealRepository.delete(id)
     }
 }

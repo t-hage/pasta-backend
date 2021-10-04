@@ -2,8 +2,18 @@ package com.tom.pasta.api.converter
 
 import com.tom.pasta.meal.model.Meal
 import com.tom.pasta.model.MealDto
-import com.tom.pasta.model.ProductDto
-import com.tom.pasta.product.model.Product
+
+fun MealDto.fromDto(): Meal {
+    return Meal(
+        id = this.id,
+        name = this.name,
+        productEntries =
+        if (this.id == null)
+            emptyList()
+        else
+            this.productEntries.map { it.mealProductEntryFromDto(this.id) }
+    )
+}
 
 fun Meal.toDto(): MealDto {
     return MealDto(
