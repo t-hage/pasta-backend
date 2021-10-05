@@ -6,6 +6,6 @@ interface ProductService {
     fun getProducts(): List<Product>
     fun find(id: Long): Product?
     fun create(product: Product): Product
-    fun update(product: Product): Product?
+    fun update(product: Product)
     fun delete(id: Long)
 }

@@ -25,38 +25,29 @@ internal class InMemoryMealProductEntryRepository(val productRepository: Product
         Pair(3L, mutableListOf(asEntry(4, 1, 1000, QuantityType.GRAM)))
     )
 
-    override fun getAllByMealId(id: Long): List<ProductEntry> {
+    override fun getAll(id: Long): List<ProductEntry> {
         return allProductsEntries[id]?.toList() ?: emptyList()
     }
 
-    override fun upsertProductEntriesForMealId(
-        mealId: Long,
-        mealProductEntries: List<ProductEntry>
-    ): List<ProductEntry> {
-        deleteAllByMealId(mealId)
-        for (mealProductEntry in mealProductEntries) {
-            if (mealProductEntry.id == null) continue
-            addProductEntry(mealId, mealProductEntry)
-        }
-
-        return getAllByMealId(mealId)
-    }
-
-    override fun deleteAllByMealId(mealId: Long) {
+    override fun deleteAll(mealId: Long) {
         allProductsEntries[mealId]?.removeIf { true }
     }
 
-    fun find(mealId: Long, productEntryId: Long): ProductEntry? {
-        return allProductsEntries[mealId]?.firstOrNull {
-            it.id == productEntryId
-        }
-    }
-
-    private fun addProductEntry(mealId: Long, mealProductEntry: ProductEntry): ProductEntry {
-        val actualMealProductEntry = validatedMPE(mealProductEntry)
-
+    override fun create(mealId: Long, productEntry: ProductEntry): ProductEntry {
+        val actualMealProductEntry = validatedMPE(productEntry)
         allProductsEntries.getOrDefault(mealId, mutableListOf()).add(actualMealProductEntry)
         return actualMealProductEntry
+    }
+
+    override fun update(mealId: Long, productEntry: ProductEntry) {
+        val list = allProductsEntries[mealId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        list.firstOrNull { it.id == productEntry.id } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        list.removeIf { it.id == productEntry.id }
+        list.add(productEntry)
+    }
+
+    override fun deleteForMeal(mealId: Long, productEntryId: Long) {
+        allProductsEntries[mealId]?.removeIf { it.id == productEntryId }
     }
 
     private fun validatedMPE(mealProductEntry: ProductEntry): ProductEntry {

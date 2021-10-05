@@ -35,7 +35,7 @@ internal class InMemoryShoppingListRepository(
     }
 
     private fun getProductEntries(id: Long): List<ProductEntry> {
-        return shoppingListProductEntryRepository.getAllByShoppingListId(id)
+        return shoppingListProductEntryRepository.getAll(id)
     }
 
     private fun asShoppingList(

@@ -2,7 +2,9 @@ package com.tom.pasta.product.repository.impl
 
 import com.tom.pasta.product.model.Product
 import com.tom.pasta.product.repository.ProductRepository
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
+import org.springframework.web.server.ResponseStatusException
 
 @Repository
 internal class InMemoryProductRepository : ProductRepository {
@@ -29,11 +31,10 @@ internal class InMemoryProductRepository : ProductRepository {
         return newProduct
     }
 
-    override fun update(product: Product): Product? {
-        findById(product.id!!) ?: return null
+    override fun update(product: Product) {
+        findById(product.id!!) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         delete(product.id)
         allProducts.add(product)
-        return product
     }
 
     override fun delete(id: Long) {

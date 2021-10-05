@@ -64,10 +64,6 @@ paths:
       responses:
         '200':
           description: "Edit Product"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Product"
         '404':
           description: 'Does not exist'
     delete:
@@ -135,10 +131,6 @@ paths:
       responses:
         '200':
           description: "Edit Meal"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Meal"
         '404':
           description: 'Does not exist'
     delete:
@@ -155,9 +147,19 @@ paths:
         schema:
           type: integer
           format: int64
-  /meals/{mealId}/entry:
+  /meals/{mealId}/entries:
+    get:
+      operationId: getMealEntries
+      responses:
+        '200':
+          description: "Lists all Product Entries for a Meal"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ProductEntry"
     post:
-      operationId: addEntry
+      operationId: addMealEntry
       requestBody:
         content:
           application/json:
@@ -180,9 +182,9 @@ paths:
         schema:
           type: integer
           format: int64
-  /meals/{mealId}/entry/{entryId}:
+  /meals/{mealId}/entries/{entryId}:
     put:
-      operationId: updateEntry
+      operationId: updateMealEntry
       requestBody:
         content:
           application/json:
@@ -191,15 +193,9 @@ paths:
         required: true
       responses:
         '200':
-          description: "Edit Meal"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProductEntry"
-        '404':
-          description: 'Does not exist'
+          description: "Update Meal Product Entry"
     delete:
-      operationId: deleteEntry
+      operationId: deleteMealEntry
       responses:
         '204':
           description: "Delete Entry"
@@ -239,6 +235,74 @@ paths:
           schema:
             type: integer
             format: int64
+  /shoppingLists/{shoppingListId}/entries:
+    get:
+      operationId: getShoppingListEntries
+      responses:
+        '200':
+          description: "Lists all Product Entries for a Shopping List"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ProductEntry"
+    post:
+      operationId: addShoppingListEntry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntry'
+        required: true
+      responses:
+        '200':
+          description: "?"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductEntry"
+        '404':
+          description: 'Does not exist'
+    parameters:
+      - in: path
+        name: shoppingListId
+        required: true
+        schema:
+          type: integer
+          format: int64
+
+  /shoppingLists/{shoppingListId}/entries/{entryId}:
+    put:
+      operationId: updateShoppingListEntry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntry'
+        required: true
+      responses:
+        '200':
+          description: "Update Shopping List Product Entry"
+    delete:
+      operationId: deleteShoppingListEntry
+      responses:
+        '204':
+          description: "Delete Entry"
+      tags:
+        - Meal
+    parameters:
+      - in: path
+        name: shoppingListId
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: path
+        name: entryId
+        required: true
+        schema:
+          type: integer
+          format: int64
 
   /shoppingLists/{shoppingListId}/mergedProductEntries:
     get:
@@ -317,9 +381,6 @@ components:
           format: int64
         name:
           type: string
-        productEntries:
-          items:
-            $ref: "#/components/schemas/ProductEntry"
     ShoppingList:
       type: object
       required:
@@ -331,9 +392,3 @@ components:
           format: int64
         name:
           type: string
-        meals:
-          items:
-            $ref: "#/components/schemas/Meal"
-        productEntries:
-          items:
-            $ref: "#/components/schemas/ProductEntry"

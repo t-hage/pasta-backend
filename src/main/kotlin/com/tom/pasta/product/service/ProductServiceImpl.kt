@@ -19,8 +19,8 @@ private class ProductServiceImpl(val productRepository: ProductRepository) : Pro
         return productRepository.create(product.copy(id = null))
     }
 
-    override fun update(product: Product): Product? {
-        return productRepository.update(product)
+    override fun update(product: Product) {
+        productRepository.update(product)
     }
 
     override fun delete(id: Long) {

@@ -1,13 +1,11 @@
 package com.tom.pasta.product
 
+import com.tom.pasta.product.model.Product
 import com.tom.pasta.product.model.ProductEntry
-import com.tom.pasta.product.repository.MealProductEntryRepository
-import com.tom.pasta.product.repository.ShoppingListProductEntryRepository
-import org.springframework.stereotype.Service
 
-@Service
-class ShoppingListProductEntryService(val shoppingListProductEntryRepository: ShoppingListProductEntryRepository) {
-    fun getAllByShoppingListId(id: Long): List<ProductEntry> {
-        return shoppingListProductEntryRepository.getAllByShoppingListId(id)
-    }
+interface ShoppingListProductEntryService {
+    fun getAll(shoppingListId: Long): List<ProductEntry>
+    fun create(shoppingListId: Long, productEntry: ProductEntry): ProductEntry
+    fun update(shoppingListId: Long, productEntry: ProductEntry)
+    fun delete(shoppingListId: Long, productEntryId: Long)
 }

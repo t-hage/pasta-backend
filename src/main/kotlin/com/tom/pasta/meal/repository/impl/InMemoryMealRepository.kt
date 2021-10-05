@@ -3,7 +3,9 @@ package com.tom.pasta.meal.repository.impl
 import com.tom.pasta.meal.model.Meal
 import com.tom.pasta.meal.repository.MealRepository
 import com.tom.pasta.product.repository.MealProductEntryRepository
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
+import org.springframework.web.server.ResponseStatusException
 
 @Repository
 class InMemoryMealRepository(val mealProductEntryRepository: MealProductEntryRepository) : MealRepository {
@@ -15,32 +17,29 @@ class InMemoryMealRepository(val mealProductEntryRepository: MealProductEntryRep
 
     override fun findById(id: Long): Meal? {
         return allMeals.firstOrNull { it.id == id }
-            ?.copy(productEntries = mealProductEntryRepository.getAllByMealId(id))
+            ?.copy(productEntries = mealProductEntryRepository.getAll(id))
     }
 
     override fun getAllMeals(): List<Meal> {
-        return allMeals.map { it.copy(productEntries = mealProductEntryRepository.getAllByMealId(it.id!!)) }
+        return allMeals.map { it.copy(productEntries = mealProductEntryRepository.getAll(it.id!!)) }
     }
 
     override fun create(meal: Meal): Meal {
         val newMeal = meal.copy(id = getNewId(), productEntries = emptyList())
         allMeals.add(newMeal)
-
-        mealProductEntryRepository.upsertProductEntriesForMealId(newMeal.id!!, meal.productEntries)
-        return findById(newMeal.id) ?: throw Exception("Not found")
+        return findById(newMeal.id!!) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     override fun update(meal: Meal): Meal? {
         findById(meal.id!!) ?: return null
         delete(meal.id)
         allMeals.add(meal.copy(productEntries = emptyList()))
-        mealProductEntryRepository.upsertProductEntriesForMealId(meal.id, meal.productEntries)
-        return findById(meal.id) ?: throw Exception("Not found")
+        return findById(meal.id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     override fun delete(id: Long) {
         allMeals.removeIf { it.id == id }
-        mealProductEntryRepository.deleteAllByMealId(id)
+        mealProductEntryRepository.deleteAll(id)
     }
 
     private fun getNewId(): Long {
@@ -52,7 +51,6 @@ class InMemoryMealRepository(val mealProductEntryRepository: MealProductEntryRep
         id: Long,
         name: String
     ): Meal {
-        val productEntries = mealProductEntryRepository.getAllByMealId(id)
-        return Meal(id, name, productEntries)
+        return Meal(id, name, mutableListOf())
     }
 }

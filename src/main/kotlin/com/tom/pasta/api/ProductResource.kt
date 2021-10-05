@@ -23,10 +23,10 @@ class ProductResource(val productService: ProductService) : ProductsApi {
         return ResponseEntity.ok(productService.create(productDto.fromDto()).toDto())
     }
 
-    override fun editProduct(productId: Long, productDto: ProductDto): ResponseEntity<ProductDto> {
+    override fun editProduct(productId: Long, productDto: ProductDto): ResponseEntity<Unit> {
         val product = productDto.fromDto().copy(id = productId)
-        val updatedProduct = productService.update(product) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
-        return ResponseEntity.ok(updatedProduct.toDto())
+        productService.update(product)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     override fun deleteProduct(productId: Long): ResponseEntity<Unit> {
