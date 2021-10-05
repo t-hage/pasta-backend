@@ -303,6 +303,50 @@ paths:
         schema:
           type: integer
           format: int64
+  /shoppingLists/{shoppingListId}/meals:
+    get:
+      operationId: getShoppingListMeals
+      responses:
+        '200':
+          description: "Lists all Meals for a Shopping List"
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Meal"
+    parameters:
+      - in: path
+        name: shoppingListId
+        required: true
+        schema:
+          type: integer
+          format: int64
+  /shoppingLists/{shoppingListId}/meals/{mealId}:
+    put:
+      operationId: addMealToShoppingList
+      responses:
+        '200':
+          description: "Add Meal To Shopping List"
+    delete:
+      operationId: deleteMealFromShoppingList
+      responses:
+        '204':
+          description: "Delete Meal From Shopping List"
+      tags:
+        - Meal
+    parameters:
+      - in: path
+        name: shoppingListId
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: path
+        name: mealId
+        required: true
+        schema:
+          type: integer
+          format: int64
 
   /shoppingLists/{shoppingListId}/mergedProductEntries:
     get:

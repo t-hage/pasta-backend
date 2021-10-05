@@ -21,8 +21,7 @@ internal class InMemoryMealProductEntryRepository(val productRepository: Product
                 asEntry(2, 2, 8, QuantityType.ML)
             )
         ),
-        Pair(2L, mutableListOf(asEntry(3, 3, 10, QuantityType.PIECES))),
-        Pair(3L, mutableListOf(asEntry(4, 1, 1000, QuantityType.GRAM)))
+        Pair(2L, mutableListOf(asEntry(3, 3, 10, QuantityType.PIECES)))
     )
 
     override fun getAll(id: Long): List<ProductEntry> {
@@ -35,7 +34,9 @@ internal class InMemoryMealProductEntryRepository(val productRepository: Product
 
     override fun create(mealId: Long, productEntry: ProductEntry): ProductEntry {
         val actualMealProductEntry = validatedMPE(productEntry)
-        allProductsEntries.getOrDefault(mealId, mutableListOf()).add(actualMealProductEntry)
+        allProductsEntries.getOrPut(mealId){
+            mutableListOf()
+        }.add(actualMealProductEntry)
         return actualMealProductEntry
     }
 

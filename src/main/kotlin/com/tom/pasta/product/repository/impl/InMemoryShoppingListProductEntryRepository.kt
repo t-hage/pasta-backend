@@ -38,7 +38,9 @@ internal class InMemoryShoppingListProductEntryRepository(val productRepository:
 
     override fun create(shoppingListId: Long, productEntry: ProductEntry): ProductEntry {
         val actualProductEntry = validatedMPE(productEntry)
-        allProductsEntries.getOrDefault(shoppingListId, mutableListOf()).add(actualProductEntry)
+        allProductsEntries.getOrPut(shoppingListId){
+            mutableListOf()
+        }.add(actualProductEntry)
         return actualProductEntry
     }
 

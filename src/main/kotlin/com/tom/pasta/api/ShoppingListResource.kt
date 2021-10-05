@@ -2,6 +2,7 @@ package com.tom.pasta.api
 
 import com.tom.pasta.api.converter.fromDto
 import com.tom.pasta.api.converter.toDto
+import com.tom.pasta.model.MealDto
 import com.tom.pasta.model.ProductEntryDto
 import com.tom.pasta.model.ProductQuantityDto
 import com.tom.pasta.model.ShoppingListDto
@@ -37,7 +38,8 @@ class ShoppingListResource(
         shoppingListId: Long,
         productEntryDto: ProductEntryDto
     ): ResponseEntity<ProductEntryDto> {
-        val createdProductEntry = shoppingListProductEntryService.create(shoppingListId, productEntryDto.fromDto()).toDto()
+        val createdProductEntry =
+            shoppingListProductEntryService.create(shoppingListId, productEntryDto.fromDto()).toDto()
         return ResponseEntity.ok(createdProductEntry)
     }
 
@@ -53,5 +55,20 @@ class ShoppingListResource(
     override fun deleteShoppingListEntry(shoppingListId: Long, entryId: Long): ResponseEntity<Unit> {
         shoppingListProductEntryService.delete(shoppingListId, entryId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
+    override fun getShoppingListMeals(shoppingListId: Long): ResponseEntity<List<MealDto>> {
+        val meals = shoppingListService.getAllMeals(shoppingListId).map { it.toDto() }
+        return ResponseEntity.ok(meals)
+    }
+
+    override fun addMealToShoppingList(shoppingListId: Long, mealId: Long): ResponseEntity<Unit> {
+        shoppingListService.addMeal(shoppingListId, mealId)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    override fun deleteMealFromShoppingList(shoppingListId: Long, mealId: Long): ResponseEntity<Unit> {
+        shoppingListService.deleteMeal(shoppingListId, mealId)
+        return ResponseEntity(HttpStatus.OK)
     }
 }

@@ -1,5 +1,6 @@
 package com.tom.pasta.shoppinglist.service
 
+import com.tom.pasta.meal.model.Meal
 import com.tom.pasta.product.model.ProductEntry
 import com.tom.pasta.product.model.Quantity
 import com.tom.pasta.product.model.QuantityType
@@ -26,6 +27,18 @@ class ShoppingListServiceImpl(val shoppingListRepository: ShoppingListRepository
         val groupedByProducts = allProductEntries.groupBy { it.product.id }
 
         return groupedByProducts.flatMap { mergeProductEntries(it.value) }
+    }
+
+    override fun getAllMeals(shoppingListId: Long): List<Meal> {
+        return shoppingListRepository.getMeals(shoppingListId)
+    }
+
+    override fun addMeal(shoppingListId: Long, mealId: Long) {
+        shoppingListRepository.addMeal(shoppingListId, mealId)
+    }
+
+    override fun deleteMeal(shoppingListId: Long, mealId: Long) {
+        shoppingListRepository.deleteMeal(shoppingListId, mealId)
     }
 
     private fun mergeProductEntries(productEntries: List<ProductEntry>): List<ProductQuantity> {
