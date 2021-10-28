@@ -348,9 +348,9 @@ paths:
           type: integer
           format: int64
 
-  /shoppingLists/{shoppingListId}/mergedProductEntries:
+  /shoppingLists/{shoppingListId}/items:
     get:
-      operationId: getShoppingListMergedProductEntries
+      operationId: getShoppingListItems
       responses:
         '200':
           description: "Lists a Shopping Lists merged product entries from both products and meals"
@@ -358,7 +358,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/ProductQuantity"
+                  $ref: "#/components/schemas/ShoppingListItem"
         '404':
           description: "No Shopping List found"
       tags:
@@ -366,6 +366,34 @@ paths:
       parameters:
         - in: path
           name: shoppingListId
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+  /shoppingLists/{shoppingListId}/items/{productId}:
+    post:
+      operationId: checkShoppingListItem
+      responses:
+        '200':
+          description: "Check a Shopping Lists Item"
+        '404':
+          description: "No Shopping List or Product found"
+      tags:
+        - ShoppingList
+      parameters:
+        - in: query
+          name: checked
+          schema:
+            type: boolean
+        - in: path
+          name: shoppingListId
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: productId
           required: true
           schema:
             type: integer
@@ -396,13 +424,15 @@ components:
           $ref: "#/components/schemas/Product"
         quantity:
           $ref: "#/components/schemas/Quantity"
-    ProductQuantity:
+    ShoppingListItem:
       type: object
       properties:
         product:
           $ref: "#/components/schemas/Product"
         quantity:
           $ref: "#/components/schemas/Quantity"
+        checked:
+          type: boolean
     Quantity:
       type: object
       required:

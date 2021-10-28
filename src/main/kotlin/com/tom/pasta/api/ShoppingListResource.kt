@@ -2,12 +2,10 @@ package com.tom.pasta.api
 
 import com.tom.pasta.api.converter.fromDto
 import com.tom.pasta.api.converter.toDto
-import com.tom.pasta.model.MealDto
-import com.tom.pasta.model.ProductEntryDto
-import com.tom.pasta.model.ProductQuantityDto
-import com.tom.pasta.model.ShoppingListDto
+import com.tom.pasta.model.*
 import com.tom.pasta.product.ShoppingListProductEntryService
 import com.tom.pasta.shoppinglist.ShoppingListService
+import com.tom.pasta.shoppinglist.model.ShoppingListCheck
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -23,10 +21,16 @@ class ShoppingListResource(
         else ResponseEntity.ok(shoppingListDto)
     }
 
-    override fun getShoppingListMergedProductEntries(shoppingListId: Long): ResponseEntity<List<ProductQuantityDto>> {
-        val productQuantities = shoppingListService.getShoppingListMergedProductEntries(shoppingListId)
+    override fun getShoppingListItems(shoppingListId: Long): ResponseEntity<List<ShoppingListItemDto>> {
+        val productQuantities = shoppingListService.getShoppingListItems(shoppingListId)
             .map { it.toDto() }
         return ResponseEntity.ok(productQuantities)
+    }
+
+    override fun checkShoppingListItem(shoppingListId: Long, productId: Long, checked: Boolean?): ResponseEntity<Unit> {
+        val shoppingListCheck = ShoppingListCheck(shoppingListId, productId, checked ?: true)
+        shoppingListService.checkShoppingListItem(shoppingListCheck)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     override fun getShoppingListEntries(shoppingListId: Long): ResponseEntity<List<ProductEntryDto>> {
